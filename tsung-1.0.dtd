@@ -498,5 +498,8 @@ repeat | if | change_type | foreach | set_option | interaction | mongo )*>
 
 <!ELEMENT mongo (#PCDATA) >
 <!ATTLIST mongo
-        arith       (add | sub) #IMPLIED
-        type        (echo | compute) #REQUIRED >
+    database     CDATA #IMPLIED
+    collection   CDATA #IMPLIED
+    documents     CDATA #IMPLIED
+    selector     CDATA #IMPLIED
+    type      (insert | update | delete | query) #REQUIRED >

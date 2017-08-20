@@ -7,11 +7,14 @@
 %%% Created : 03. 八月 2017 下午8:04
 %%%-------------------------------------------------------------------
 -author("kantappa").
+-ifndef(TS_MONGO).
+-define(TS_MONGO, true).
 
 -record(mongo_request, {
     type,
-    arith,
-    data             % may be a string or two numbers
+    database,
+    collection,
+    documents
 }).
 
 -record(mongo_session,
@@ -33,7 +36,4 @@
 }
 ).
 
-%%% Supported byte code instructions
--define(ECHO, 0).
--define(ADD, 1).
--define(SUB, 2).
+-endif.
