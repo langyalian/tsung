@@ -40,10 +40,12 @@ add_dynparams(Bool, DynData, Param, HostData) ->
 
 
 get_message(Req = #mongo_request{type = insert, database = Db, collection = Collection}, #state_rcv{session = S}) ->
-    Docs = [#{name=><<"lisi">>,age=>12}],
+    Docs = [#{name=><<"lisi">>, age=>12}],
     io:format("~n[~p ~p]req = ~p~n", [?MODULE, ?LINE, Req]),
     Bin = mongo_protocol:encode(Db, #insert{collection = Collection, documents = Docs}, 1),
     {Bin, S};
+get_message(#mongo_request{type = close}, #state_rcv{} = State) ->
+    {State#state_rcv{ack_done = true, datasize = 0}, [], true};
 get_message(#mongo_request{}, #state_rcv{session = S}) ->
     {<<"mongo">>, S}.
 
@@ -59,14 +61,14 @@ dump(A, B) ->
 parse(closed, State) ->
     {State, true};
 parse(Data, State) ->
-    io:format("~n[~p ~p]data = ~p~n",[?MODULE,?LINE,Data]),
+    io:format("~n[~p ~p]data = ~p~n", [?MODULE, ?LINE, Data]),
     {State#state_rcv{}, [], false}.
 
 parse_bidi(Data, State) ->
     ts_plugin:parse_bidi(Data, State).
 
 parse_config(Element, Conf) ->
-    io:format("~n[~p ~p]element = ~p,conf = ~p~n",[?MODULE,?LINE,Element,Conf]),
+    io:format("~n[~p ~p]element = ~p,conf = ~p~n", [?MODULE, ?LINE, Element, Conf]),
     ts_config_mongo:parse_config(Element, Conf).
 
 decode_buffer(Buffer, #mongo_session{}) ->

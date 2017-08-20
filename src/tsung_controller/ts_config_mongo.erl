@@ -37,6 +37,7 @@ parse_config(Element = #xmlElement{name = mongo},
                       Database = ts_config:getAttr(atom, Element#xmlElement.attributes, database),
                       Collection = ts_config:getAttr(atom, Element#xmlElement.attributes, collection),
                       #mongo_request{type = insert, database = Database, collection = Collection};
+                  close->#mongo_request{type = close};
                   _ ->
                       #mongo_request{}
               end,

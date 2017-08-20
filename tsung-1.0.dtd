@@ -502,4 +502,4 @@ repeat | if | change_type | foreach | set_option | interaction | mongo )*>
     collection   CDATA #IMPLIED
     documents     CDATA #IMPLIED
     selector     CDATA #IMPLIED
-    type      (insert | update | delete | query) #REQUIRED >
+    type      (insert | update | delete | query | close) #REQUIRED >
