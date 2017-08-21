@@ -31,18 +31,18 @@ parse_config(Element = #xmlElement{name = mongo},
     Config = #config{curid = Id, session_tab = Tab,
         sessions = [CurS | _], dynvar = DynVar,
         subst = SubstFlag, match = MatchRegExp}) ->
-    Request = case ts_config:getAttr(atom, Element#xmlElement.attributes, type) of
-                  insert ->
-                      Database = ts_config:getAttr(atom, Element#xmlElement.attributes, database),
-                      Collection = ts_config:getAttr(atom, Element#xmlElement.attributes, collection),
-                      Content = ts_config:getText(Element#xmlElement.content),
-                      Documents = list_to_binary(ts_utils:clean_str(Content)),
-                      #mongo_request{type = insert, database = Database, collection = Collection, documents = Documents};
-                  close -> #mongo_request{type = close};
-                  _ ->
-                      #mongo_request{}
-              end,
-    Msg = #ts_request{ack = parse,
+    {Ack, Request} = case ts_config:getAttr(atom, Element#xmlElement.attributes, type) of
+                         insert ->
+                             Database = ts_config:getAttr(atom, Element#xmlElement.attributes, database),
+                             Collection = ts_config:getAttr(atom, Element#xmlElement.attributes, collection),
+                             Content = ts_config:getText(Element#xmlElement.content),
+                             Documents = list_to_binary(ts_utils:clean_str(Content)),
+                             {no_ack, #mongo_request{type = insert, database = Database, collection = Collection, documents = Documents}};
+                         close -> {no_ack, #mongo_request{type = close}};
+                         _ ->
+                             {no_ack, #mongo_request{}}
+                     end,
+    Msg = #ts_request{ack = Ack,
         endpage = true,
         dynvar_specs = DynVar,
         subst = SubstFlag,
