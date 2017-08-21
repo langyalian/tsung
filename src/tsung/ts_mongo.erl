@@ -17,7 +17,6 @@
 -include("mongo_protocol.hrl").
 
 %% API
--export([document_user/1]).
 
 %% ts_plugin callback
 -export([add_dynparams/4,
@@ -29,12 +28,6 @@
     parse_config/2,
     decode_buffer/2,
     new_session/0]).
-
-
-document_user({Session, DynData}) ->
-    io:format("~n[~p ~p] document_user = ~p ~n", [?MODULE, ?LINE, {Session, DynData}]),
-    Docs = [#{name=><<"lisi">>, age=>32, sex=><<"male">>}],
-    <<<<<<(bson_binary:put_document(Doc))/binary>> || Doc <- Docs>>/binary>>.
 
 
 add_dynparams(false, {_DynVars, Session}, Param, HostData) ->

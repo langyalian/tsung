@@ -20,10 +20,6 @@
  <sessions>
    <sessions>
       <session probability="100" name="mongo-example" type="ts_mongo">
-        <setdynvars sourcetype="erlang" callback="ts_mongo:document_user">
-           <var name="user_document" />
-         </setdynvars>
-
          <setdynvars sourcetype="random_string" length="13">
                <var name="rnd_uname" />
          </setdynvars>
