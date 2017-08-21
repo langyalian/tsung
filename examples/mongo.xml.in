@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE tsung SYSTEM "@prefix@/share/@PACKAGE_NAME@/@DTD@">
+<tsung loglevel="debug" dumptraffic="true">
+
+  <clients>
+    <client host="localhost" use_controller_vm="true"/>
+  </clients>
+
+  <!-- Server side setup -->
+ <servers>
+  <server host="127.0.0.1" port="27017" type="tcp"/>
+ </servers>
+
+ <load>
+  <arrivalphase phase="1" duration="1" unit="minute">
+    <users interarrival="3" unit="second"></users>
+  </arrivalphase>
+ </load>
+
+ <sessions>
+   <sessions>
+      <session probability="100" name="mongo-example" type="ts_mongo">
+        <setdynvars sourcetype="erlang" callback="ts_mongo:document_user">
+           <var name="user_document" />
+         </setdynvars>
+
+         <setdynvars sourcetype="random_string" length="13">
+               <var name="rnd_uname" />
+         </setdynvars>
+
+         <setdynvars sourcetype="random_number" start="1" end="100">
+                <var name="rnd_uage" />
+          </setdynvars>
+
+        <request subst="true">
+           <mongo type="insert" database="test" collection="user">{"name":"%%_rnd_uname%%","age":"%%_rnd_uage%%"}</mongo>
+        </request>
+
+        <request>
+           <mongo type="close"/>
+        </request>
+      </session>
+    </sessions>
+ </sessions>
+
+</tsung>
