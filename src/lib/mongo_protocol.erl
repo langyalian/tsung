@@ -44,9 +44,9 @@
 -define(DeleteOpcode, 2006).
 -define(KillcursorOpcode, 2007).
 
-
-encode(Db, CrudRecord, RequestId) ->
-    Payload = put_message(Db, CrudRecord, RequestId),
+-spec encode(mc_worker_api:database(), message(), requestid()) -> binary().
+encode(Db, Message, RequestId) ->
+    Payload = put_message(Db, Message, RequestId),
     <<(byte_size(Payload) + 4):32/little, Payload/binary>>.
 
 -spec dbcoll(database(), colldb()) -> bson:utf8().

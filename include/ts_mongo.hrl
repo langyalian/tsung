@@ -19,20 +19,7 @@
 
 -record(mongo_session,
 {
-}
-).
-
-%%
--record(mongo_dyndata,
-{
-    none
-}
-).
-
-%% unused
--record(mongo,
-{
-    fixme
+    requests   %% 缓存request id
 }
 ).
 

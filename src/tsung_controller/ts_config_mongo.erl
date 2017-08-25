@@ -37,8 +37,9 @@ parse_config(Element = #xmlElement{name = mongo},
                              Collection = ts_config:getAttr(atom, Element#xmlElement.attributes, collection),
                              Content = ts_config:getText(Element#xmlElement.content),
                              Documents = list_to_binary(ts_utils:clean_str(Content)),
-                             {no_ack, #mongo_request{type = insert, database = Database, collection = Collection, documents = Documents}};
-                         close -> {no_ack, #mongo_request{type = close}};
+                             {parse, #mongo_request{type = insert, database = to_binary(Database), collection = to_binary(Collection), documents = Documents}};
+                         close ->
+                             {no_ack, #mongo_request{}};
                          _ ->
                              {no_ack, #mongo_request{}}
                      end,
@@ -60,3 +61,15 @@ parse_config(Element = #xmlElement{}, Conf = #config{}) ->
 %% Parsing non #xmlElement elements
 parse_config(_, Conf = #config{}) ->
     Conf.
+
+
+to_binary(X) when is_atom(X) ->
+    to_binary(atom_to_list(X));
+to_binary(X) when is_integer(X) ->
+    to_binary(integer_to_list(X));
+to_binary(X) when is_float(X) ->
+    float_to_binary(X);
+to_binary(X) when is_list(X) ->
+    list_to_binary(X);
+to_binary(X) when is_binary(X) ->
+    X.
